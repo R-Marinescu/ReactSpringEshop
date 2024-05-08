@@ -1,6 +1,9 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
+import { jwtDecode } from 'jwt-decode';
+
+
 
 interface LoginData {
   username: string;
@@ -9,12 +12,15 @@ interface LoginData {
 
 interface LoginFormProps {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setUsername: Dispatch<SetStateAction<string | null>>;
+  setToken: Dispatch<SetStateAction<string | null>>;
   onRequestClose: () => void;
   isOpen: boolean;
 }
 
-function LoginForm({ setIsLoggedIn, onRequestClose, isOpen }: LoginFormProps): JSX.Element {
+function LoginForm({ setIsLoggedIn, setToken, onRequestClose, isOpen }: LoginFormProps): JSX.Element {
   const [username, setUsername] = useState('');
+  const [formUsername, setFormUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const login = async (loginData: LoginData) => {
@@ -25,12 +31,13 @@ function LoginForm({ setIsLoggedIn, onRequestClose, isOpen }: LoginFormProps): J
         }
       });
       const loginResponse = response.data;
-      console.log(loginResponse);
+      
       if (response.status === 200) {
         if (loginResponse.token) {
           setIsLoggedIn(true);
-          localStorage.setItem('authToken', loginResponse.token); // Example: store token in localStorage
-          console.log("Login succesfull!");
+          localStorage.setItem('authToken', loginResponse.token);
+          setToken(loginResponse.token);
+          console.log("Login successful!");
         } else {
           console.error("Login response missing token:", loginResponse);
         }
@@ -47,10 +54,10 @@ function LoginForm({ setIsLoggedIn, onRequestClose, isOpen }: LoginFormProps): J
       <div>
         <h2>Login</h2>
         <p>Username:</p>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <input type="text" value={formUsername} onChange={(e) => setFormUsername(e.target.value)} />
         <p>Password:</p>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button onClick={() => login({ username, password })}>Login</button>
+        <button onClick={() => login({ username: formUsername, password })}>Login</button>
       </div>
       <button onClick={onRequestClose}>Close</button>
     </Modal>
