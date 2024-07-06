@@ -12,7 +12,7 @@ interface UserDTO {
 interface UserDetailsProps {
   token: string;
 }
-
+//qq
 const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
   const [user, setUser] = useState<UserDTO | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -20,8 +20,17 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
+        const token = localStorage.getItem('authToken');
+        console.log('Stored Token:', token); // Debugging log
+
+        if (!token) {
+          setError('No token found');
+          return;
+        }
+
         const response = await axios.get<UserDTO>('http://localhost:8080/api/users/user-details', {
           headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
         });
