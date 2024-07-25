@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 interface UserDTO {
   userId: number;
@@ -12,7 +13,11 @@ interface UserDTO {
 interface UserDetailsProps {
   token: string;
 }
-//qq
+
+interface DecodedToken {
+  exp: number;
+}
+
 const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
   const [user, setUser] = useState<UserDTO | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -25,6 +30,17 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
 
         if (!token) {
           setError('No token found');
+          return;
+        }
+
+        const decodedToken: DecodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        console.log(currentTime);
+
+        if(decodedToken.exp < currentTime) {
+          setError('Token has epired');
+          localStorage.removeItem('authToken');
           return;
         }
 

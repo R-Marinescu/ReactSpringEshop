@@ -12,11 +12,9 @@ interface LoginFormProps {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
   setUsername: Dispatch<SetStateAction<string | null>>;
   setToken: Dispatch<SetStateAction<string | null>>;
-  onRequestClose: () => void;
-  isOpen: boolean;
 }
 
-function LoginForm({ setIsLoggedIn, setToken, onRequestClose, isOpen }: LoginFormProps): JSX.Element {
+function LoginForm({ setIsLoggedIn, setToken}: LoginFormProps): JSX.Element {
   const [username, setUsername] = useState('');
   const [formUsername, setFormUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +46,6 @@ function LoginForm({ setIsLoggedIn, setToken, onRequestClose, isOpen }: LoginFor
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div>
         <h2>Login</h2>
         <p>Username:</p>
@@ -57,9 +54,6 @@ function LoginForm({ setIsLoggedIn, setToken, onRequestClose, isOpen }: LoginFor
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button onClick={() => login({ username: formUsername, password })}>Login</button>
       </div>
-      <button onClick={onRequestClose}>Close</button>
-      {/* {localStorage.getItem('authToken') && <UserDetails token={localStorage.getItem('authToken')!} />} */}
-    </Modal>
   );
 }
 

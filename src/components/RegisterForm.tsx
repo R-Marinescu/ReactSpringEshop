@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { FormEvent } from 'react';
 import Modal from 'react-modal';
 
-interface RegisterFormProps {
-  onRequestClose: () => void;
-  isOpen: boolean;
-}
-
-const RegisterForm = ({onRequestClose, isOpen}: RegisterFormProps) => {
+const RegisterForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -54,7 +49,6 @@ const RegisterForm = ({onRequestClose, isOpen}: RegisterFormProps) => {
 
   return (
     <div>
-      <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
         <form onSubmit={handleSubmit}>
           <label htmlFor="firstName">First Name:</label>
           <input
@@ -98,8 +92,6 @@ const RegisterForm = ({onRequestClose, isOpen}: RegisterFormProps) => {
           />
           <button type="submit">Register</button>
         </form>
-        <button onClick={onRequestClose}>Close</button>
-      </Modal>
     </div>
   );
 };
