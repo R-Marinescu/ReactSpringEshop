@@ -24,26 +24,51 @@ function App() {
         }
       } catch (error) {
         console.error("Invalid token:", error);
-        setToken(null);
-        localStorage.removeItem('authToken');
+        handleLogout();
       }
     }
   }, [token]);
 
+  const handleLogout = () => {
+    setToken(null);
+    setIsLoggedIn(false);
+    setUsername(null);
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
+  };
+
   return (
     <Router>
-      <div>
-        {isLoggedIn && <p>Welcome, {username || localStorage.getItem('username')}!</p>}
-        <nav>
-          <Link to="/login" className="nav-button">Login</Link>
-          <Link to="/register" className="nav-button">Register</Link>
-          <Link to="/user-details" className="nav-button">Profile</Link>
+      <div className="container mt-4">
+        {isLoggedIn && <p className='alert alert-success'>Welcome, {username || localStorage.getItem('username')}!</p>}
+        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
+          <div className="container-fluid">
+            <Link to="/" className="navbar-brand">MyApp</Link>
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link">Login</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/register" className="nav-link">Register</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/user-details" className="nav-link">Profile</Link>
+                </li>
+                {isLoggedIn && (
+                  <li className="nav-item">
+                    <button onClick={handleLogout} className="btn btn-link nav-link">Logout</button>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
         </nav>
         <Routes>
-          <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/user-details" element={token ? <UserDetails token={token} /> : <p>Please log in to view your profile.</p>} />
-        </Routes>
+           <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
+           <Route path="/register" element={<RegisterForm />} />
+           <Route path="/user-details" element={token ? <UserDetails token={token} /> : <p>Please log in to view your profile.</p>} />
+         </Routes>
       </div>
     </Router>
   );

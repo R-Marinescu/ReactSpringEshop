@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormEvent } from 'react';
-import Modal from 'react-modal';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +10,8 @@ const RegisterForm = () => {
     password: '',
     phoneNumber: ''
   });
+
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -28,7 +30,7 @@ const RegisterForm = () => {
     };
 
     try {
-      // Send POST request to your Spring Boot API endpoint for registration
+      // Send POST request to your API endpoint for registration
       const response = await fetch('http://localhost:8080/api/users/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,57 +43,100 @@ const RegisterForm = () => {
 
       // Handle successful registration (e.g., redirect to login page)
       console.log('Registration successful!');
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error; // Type assertion to ensure TypeScript knows `err` is an Error object
       console.error('Registration error:', error);
-      // Display error message to user
+      setError('Registration failed. Please try again.');
     }
   };
 
   return (
-    <div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          <label htmlFor="password">Password:</label>
-          <input
-            type="text"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          <label htmlFor="phoneNumber">Phone number:</label>
-          <input
-            type="text"
-            id="phoneNumber"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-          />
-          <button type="submit">Register</button>
-        </form>
+    <div className="container">
+      <h2 className="my-4">Register</h2>
+      {error && <div className="alert alert-danger">{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3 row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="firstName" className="form-label">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                className="form-control"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mb-3 row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="lastName" className="form-label">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                className="form-control"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mb-3 row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                className="form-control"
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mb-3 row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="form-control"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mb-3 row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+              <input
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                className="form-control"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <button type="submit" className="btn btn-primary">Register</button>
+      </form>
     </div>
   );
 };

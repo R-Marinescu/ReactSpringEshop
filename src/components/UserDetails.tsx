@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface UserDTO {
   userId: number;
@@ -70,20 +71,28 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
   }
 
   return (
-    <div>
+    <div className="container mt-4">
       {user ? (
-        <div>
-          <p>User ID: {user.userId}</p>
-          <p>First Name: {user.firstName}</p>
-          <p>Last Name: {user.lastName}</p>
-          <p>Username: {user.username}</p>
-          <p>Phone Number: {user.phoneNumber}</p>
+        <div className="card">
+          <div className="card-header">
+            <h5 className="card-title">User Details</h5>
+          </div>
+          <div className="card-body">
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item"><strong>User ID:</strong> {user.userId}</li>
+              <li className="list-group-item"><strong>First Name:</strong> {user.firstName}</li>
+              <li className="list-group-item"><strong>Last Name:</strong> {user.lastName}</li>
+              <li className="list-group-item"><strong>Username:</strong> {user.username}</li>
+              <li className="list-group-item"><strong>Phone Number:</strong> {user.phoneNumber}</li>
+            </ul>
+          </div>
         </div>
       ) : (
-        <p>Loading user details...</p>
+        <div className="alert alert-info">Loading user details...</div>
       )}
     </div>
   );
 };
+
 
 export default UserDetails;
