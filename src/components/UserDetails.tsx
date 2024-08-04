@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,6 +10,7 @@ interface UserDTO {
   lastName: string;
   username: string;
   phoneNumber: string;
+  role: string;
 }
 
 interface UserDetailsProps {
@@ -17,11 +19,14 @@ interface UserDetailsProps {
 
 interface DecodedToken {
   exp: number;
+  sub: string;
 }
 
 const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
   const [user, setUser] = useState<UserDTO | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [responseMessage, setResponseMessage] = useState<string>('');
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -30,6 +35,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
         console.log('Stored Token:', token); // Debugging log
 
         if (!token) {
+         // setResponseMessage("Please login to view profile");
           setError('No token found');
           return;
         }
@@ -39,8 +45,8 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
 
         console.log(currentTime);
 
-        if(decodedToken.exp < currentTime) {
-          setError('Token has epired');
+        if (decodedToken.exp < currentTime) {
+          setError('Token has expired');
           localStorage.removeItem('authToken');
           return;
         }
@@ -54,6 +60,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
 
         if (response.status === 200) {
           setUser(response.data);
+          setIsAdmin(response.data.role === 'ADMIN');
         } else {
           setError('Failed to fetch user details');
         }
@@ -84,15 +91,21 @@ const UserDetails: React.FC<UserDetailsProps> = ({ token }) => {
               <li className="list-group-item"><strong>Last Name:</strong> {user.lastName}</li>
               <li className="list-group-item"><strong>Username:</strong> {user.username}</li>
               <li className="list-group-item"><strong>Phone Number:</strong> {user.phoneNumber}</li>
+              <li className="list-group-item"><strong>Role:</strong> {user.role}</li>
             </ul>
           </div>
         </div>
       ) : (
         <div className="alert alert-info">Loading user details...</div>
       )}
+
+      {isAdmin && (
+        <div className="mt-4">
+          <Link to='/admin' className="btn btn-primary">Go to Admin Panel</Link>
+        </div>
+      )}
     </div>
   );
 };
-
 
 export default UserDetails;

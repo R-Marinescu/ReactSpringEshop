@@ -135,7 +135,11 @@ const RegisterForm = () => {
             </div>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">Register</button>
+        <div className="mb-3 row justify-content-center">
+          <div className="col-md-6 col-lg-4 text-center">
+            <button type="submit" className="btn btn-primary">Register</button>
+          </div>
+        </div>
       </form>
     </div>
   );

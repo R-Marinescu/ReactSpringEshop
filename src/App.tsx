@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import LoginForm from './components/Login';
 import RegisterForm from './components/RegisterForm';
 import UserDetails from './components/UserDetails';
+import ProductDetails from './components/ProductDetails';
+import ProductList from './components/ProductList';
+import AdminPanel from './components/AdminPanel';
 import './Css/App.css';
 
 function App() {
@@ -55,27 +58,38 @@ function App() {
                 <li className="nav-item">
                   <Link to="/user-details" className="nav-link">Profile</Link>
                 </li>
+                <li className='nav-item'>
+                  <Link to='/products' className="nav-link">Products</Link>
+                </li>
                 {isLoggedIn && (
-                  <li className="nav-item">
-                    <button onClick={handleLogout} className="btn btn-link nav-link">Logout</button>
-                  </li>
+                  <>
+                    <li className="nav-item">
+                      <button onClick={handleLogout} className="btn btn-link nav-link">Logout</button>
+                    </li>
+                  </>
                 )}
               </ul>
             </div>
           </div>
         </nav>
         <Routes>
-           <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
-           <Route path="/register" element={<RegisterForm />} />
-           <Route path="/user-details" element={token ? <UserDetails token={token} /> : <p>Please log in to view your profile.</p>} />
-         </Routes>
+          <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/user-details" element={token ? <UserDetails token={token} /> : <p>Please log in to view your profile.</p>} />
+          <Route path="/product/:productId" element={<ProductDetailsWrapper />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Routes>
       </div>
     </Router>
   );
 }
 
+// Wrapper component to handle route params
+const ProductDetailsWrapper = () => {
+  const { productId } = useParams<{ productId: string }>();
+
+  return <ProductDetails productId={Number(productId)} />;
+};
+
 export default App;
-
-
-
-
