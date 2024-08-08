@@ -7,6 +7,7 @@ interface ProductDTO {
   productName: string;
   price: number;
   stockQuantity: number;
+  image: string;
 }
 
 interface ProductDetailsProps {
@@ -48,8 +49,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId }) => {
             <h5 className="card-title">Product Details</h5>
           </div>
           <div className="card-body">
+            {product.image && (
+              <div className="mb-3">
+                <img src={product.image} alt={product.productName} className="img-fluid" />
+              </div>
+            )}
             <ul className="list-group list-group-flush">
-              <li className="list-group-item"><strong>Product ID:</strong> {product.productId}</li>
               <li className="list-group-item"><strong>Product Name:</strong> {product.productName}</li>
               <li className="list-group-item"><strong>Product Price:</strong> ${product.price}</li>
               <li className="list-group-item"><strong>Stock Quantity:</strong> {product.stockQuantity}</li>

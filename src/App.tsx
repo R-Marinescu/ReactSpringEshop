@@ -7,7 +7,13 @@ import UserDetails from './components/UserDetails';
 import ProductDetails from './components/ProductDetails';
 import ProductList from './components/ProductList';
 import AdminPanel from './components/AdminPanel';
+import { Container } from "react-bootstrap";
+import Home from './components/Home';
+import About from './components/About';
+import Navbar from './components/Navbar';
 import './Css/App.css';
+import { ShoppingCartProvider } from './context/ShoppingCartContext';
+import { ProductProvider } from './context/ProductContext';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,47 +47,28 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="container mt-4">
-        {isLoggedIn && <p className='alert alert-success'>Welcome, {username || localStorage.getItem('username')}!</p>}
-        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
-          <div className="container-fluid">
-            <Link to="/" className="navbar-brand">MyApp</Link>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <Link to="/login" className="nav-link">Login</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/register" className="nav-link">Register</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/user-details" className="nav-link">Profile</Link>
-                </li>
-                <li className='nav-item'>
-                  <Link to='/products' className="nav-link">Products</Link>
-                </li>
-                {isLoggedIn && (
-                  <>
-                    <li className="nav-item">
-                      <button onClick={handleLogout} className="btn btn-link nav-link">Logout</button>
-                    </li>
-                  </>
-                )}
-              </ul>
+    <ProductProvider>
+      <ShoppingCartProvider>
+        <Container className="mb-4">
+          <Router>
+            <div>
+              {isLoggedIn && <p className='alert alert-success'>Welcome, {username || localStorage.getItem('username')}!</p>}
+              <Navbar isLoggedIn={isLoggedIn} username={username} handleLogout={handleLogout} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/About" element={<About />} />
+                <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
+                <Route path="/register" element={<RegisterForm />} />
+                <Route path="/user-details" element={token ? <UserDetails token={token} /> : <p>Please log in to view your profile.</p>} />
+                <Route path="/product/:productId" element={<ProductDetailsWrapper />} />
+                <Route path="/products" element={<ProductList />} />
+                <Route path="/admin" element={<AdminPanel />} />
+              </Routes>
             </div>
-          </div>
-        </nav>
-        <Routes>
-          <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/user-details" element={token ? <UserDetails token={token} /> : <p>Please log in to view your profile.</p>} />
-          <Route path="/product/:productId" element={<ProductDetailsWrapper />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/admin" element={<AdminPanel />} />
-        </Routes>
-      </div>
-    </Router>
+          </Router>
+        </Container>
+      </ShoppingCartProvider>
+    </ProductProvider>
   );
 }
 
