@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormEvent } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -18,9 +18,9 @@ const RegisterForm = () => {
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault();
 
-    // Prepare data for registration API call
+
     const registrationData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -30,7 +30,6 @@ const RegisterForm = () => {
     };
 
     try {
-      // Send POST request to your API endpoint for registration
       const response = await fetch('http://localhost:8080/api/users/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,10 +40,9 @@ const RegisterForm = () => {
         throw new Error('Registration failed: ' + (await response.text()));
       }
 
-      // Handle successful registration (e.g., redirect to login page)
       console.log('Registration successful!');
     } catch (err) {
-      const error = err as Error; // Type assertion to ensure TypeScript knows `err` is an Error object
+      const error = err as Error;
       console.error('Registration error:', error);
       setError('Registration failed. Please try again.');
     }
