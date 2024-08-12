@@ -26,7 +26,7 @@ type ShoppingCartContext = {
 
 const ShoppingCartContext = createContext({} as ShoppingCartContext);
 
-const useShoppingCart = () => {
+export const useShoppingCart = () => {
     return useContext(ShoppingCartContext);
 }
 
@@ -84,6 +84,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     }
 
     function clearCart() {
+        console.log('Clearing the cart');
         setCartItems([]);
     }
 

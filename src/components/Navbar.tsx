@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { Navbar as BootstrapNavbar, Nav, Button, Container } from 'react-bootstrap';
 import useShoppingCart from '../context/ShoppingCartContext';
 
-
-
 const Navbar = ({ isLoggedIn, username, handleLogout }) => {
-    const { openCart, cartQuantity } = useShoppingCart();
+    const { openCart, cartQuantity, clearCart } = useShoppingCart();
+
+    const handleLogoutAndClearCart = () => {
+        clearCart();
+        handleLogout();
+    };
 
     return (
         <BootstrapNavbar sticky="top" className="shadow-sm bg-white mb-4">
@@ -21,7 +24,7 @@ const Navbar = ({ isLoggedIn, username, handleLogout }) => {
                         <Nav.Link as={Link} to="/products">Store</Nav.Link>
                         <Nav.Link as={Link} to="/About">About</Nav.Link>
                         {isLoggedIn && (
-                            <Nav.Link as="button" className="btn btn-link" onClick={handleLogout}>Logout</Nav.Link>
+                            <Nav.Link as="button" className="btn btn-link" onClick={handleLogoutAndClearCart}>Logout</Nav.Link>
                         )}
                     </Nav>
                 </BootstrapNavbar.Collapse>

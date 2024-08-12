@@ -1,5 +1,6 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import axios from 'axios';
+import { useUserContext } from '../context/UserContext';
 
 interface LoginData {
   username: string;
@@ -13,6 +14,8 @@ interface LoginFormProps {
 }
 
 function LoginForm({ setIsLoggedIn, setToken }: LoginFormProps): JSX.Element {
+  const { fetchUserDetails } = useUserContext();
+
   const [formUsername, setFormUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,7 +33,8 @@ function LoginForm({ setIsLoggedIn, setToken }: LoginFormProps): JSX.Element {
           setIsLoggedIn(true);
           localStorage.setItem('authToken', loginResponse.token);
           setToken(loginResponse.token);
-          console.log("Login successful!");
+          fetchUserDetails();
+          alert("Login successful!");
         } else {
           console.error("Login response missing token:", loginResponse);
         }

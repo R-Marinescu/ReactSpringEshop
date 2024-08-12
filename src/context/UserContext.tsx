@@ -25,6 +25,7 @@ interface UserContextProps {
     user: UserDTO | null;
     isAdmin: boolean;
     error: string | null;
+    fetchUserDetails: () => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -39,21 +40,19 @@ export const useUserContext = () => {
 
 type UserProviderProps = {
     children: ReactNode;
-    token: string;
 };
 
-export const UserProvider: React.FC<UserProviderProps> = ({ token, children }) => {
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<UserDTO | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-    useEffect(() => {
         const fetchUserDetails = async () => {
             try {
                 const storedToken = localStorage.getItem('authToken');
-
-                if (!storedToken) {
-                    setError('No token found');
+                
+                if (!storedToken) {     
+                    setError('No token found in UserContext');
                     return;
                 }
 
@@ -85,11 +84,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ token, children }) =
             }
         };
 
-        fetchUserDetails();
-    }, [token]);
+        useEffect(() => {
+            fetchUserDetails();
+          }, []);
 
     return (
-        <UserContext.Provider value={{ user, isAdmin, error }}>
+        <UserContext.Provider value={{ user, isAdmin, error, fetchUserDetails }}>
             {children}
         </UserContext.Provider>
     );
