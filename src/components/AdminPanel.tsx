@@ -49,6 +49,7 @@ const AdminProductManager: React.FC = () => {
       });
 
       setResponseMessage(`Product created successfully: ${response.data.id}`);
+      alert(`Product: ${product.productName} with id : ${response.data.id} created successfully`);
     } catch (error) {
       setError('Error creating product');
     }
@@ -71,6 +72,7 @@ const AdminProductManager: React.FC = () => {
       if (product.price) formData.append('price', product.price);
       if (product.stockQuantity) formData.append('stockQuantity', product.stockQuantity.toString());
       if (product.image) formData.append('image', product.image);
+      console.log(product.image);
 
       const response = await axios.post(`${apiUrl}/updateProduct/${productId}`, formData, {
         headers: {
@@ -80,8 +82,10 @@ const AdminProductManager: React.FC = () => {
       });
 
       setResponseMessage(`Product updated successfully: ${response.data.id}`);
+      alert(`Product updated successfully`)
     } catch (error) {
       setError('Error updating product');
+      console.log('Error updating product')
     }
   };
 
@@ -109,73 +113,108 @@ const AdminProductManager: React.FC = () => {
         }
       });
       setResponseMessage('Product deleted successfully');
+      alert('Product with deleted successfully')
     } catch (error) {
       setError('Error deleting product');
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <form onSubmit={handleCreateProduct}>
-        <input
-          type="text"
-          placeholder="Product Name"
-          value={product.productName}
-          onChange={(e) => setProduct({ ...product, productName: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={product.price}
-          onChange={(e) => setProduct({ ...product, price: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Stock Quantity"
-          value={product.stockQuantity}
-          onChange={(e) => setProduct({ ...product, stockQuantity: Number(e.target.value) })}
-        />
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit">Create Product</button>
+        <div className="mb-3 row justify-content-left">
+          <div className="col-md-5 col-lg-4">
+            <label htmlFor="Product Name">Product Name</label>
+            <input
+              type="text"
+              placeholder="Product Name"
+              className="form-control"
+              value={product.productName}
+              onChange={(e) => setProduct({ ...product, productName: e.target.value })}
+            />
+            <label htmlFor="Price"> Price</label>
+            <input
+              type="number"
+              placeholder="Price"
+              className="form-control"
+              value={product.price}
+              onChange={(e) => setProduct({ ...product, price: e.target.value })}
+            />
+            <label htmlFor="Stock Qantity">Quantity</label>
+            <input
+              type="number"
+              className="form-control"
+              value={product.stockQuantity}
+              onChange={(e) => setProduct({ ...product, stockQuantity: Number(e.target.value) })}
+            />
+            <label>Product Image</label>
+            <input type="file" className="form-control" onChange={handleFileChange} />
+            <div className="col-md-6 col-lg-4" >
+              <button type="submit" className="btn btn-primary w-100 mt-2">Create Product</button>
+            </div>
+          </div>
+        </div>
       </form>
 
       <form onSubmit={handleUpdateProduct}>
-        <input
-          type="number"
-          placeholder="Product ID"
-          value={productId || ''}
-          onChange={(e) => setProductId(Number(e.target.value))}
-        />
-        <input
-          type="text"
-          placeholder="Product Name"
-          value={product.productName}
-          onChange={(e) => setProduct({ ...product, productName: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={product.price}
-          onChange={(e) => setProduct({ ...product, price: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Stock Quantity"
-          value={product.stockQuantity}
-          onChange={(e) => setProduct({ ...product, stockQuantity: Number(e.target.value) })}
-        />
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit">Update Product</button>
+        <div className="mb-3 row justify-content-right">
+          <div className="col-md-5 col-lg-4">
+          <label htmlFor="Product Id">Product Id</label>
+            <input
+              type="number"
+              placeholder="Product Id"
+              className="form-control"
+              value={productId || ''}
+              onChange={(e) => setProductId(Number(e.target.value))}
+            />
+            <label htmlFor="Product Name">Product Name</label>
+            <input
+              type="text"
+              placeholder="Product Name"
+              className="form-control"
+              value={product.productName}
+              onChange={(e) => setProduct({ ...product, productName: e.target.value })}
+            />
+            <label htmlFor="Price"> Price</label>
+            <input
+              type="number"
+              placeholder="Price"
+              className="form-control"
+              value={product.price}
+              onChange={(e) => setProduct({ ...product, price: e.target.value })}
+            />
+            <label htmlFor="Storck Qantity">Quantity</label>
+            <input
+              type="number"
+              placeholder="Stock Quantity"
+              className="form-control"
+              value={product.stockQuantity}
+              onChange={(e) => setProduct({ ...product, stockQuantity: Number(e.target.value) })}
+            />
+            <label>Product Image</label>
+            <input type="file" className="form-control" onChange={handleFileChange} />
+            <div className="col-md-6 col-lg-5" >
+              <button type="submit" className="btn btn-primary w-100 mt-2">Update Product</button>
+            </div>
+          </div>
+        </div>
       </form>
 
       <form onSubmit={handleDeleteProduct}>
-        <input
-          type="number"
-          placeholder="Product ID"
-          value={productId || ''}
-          onChange={(e) => setProductId(Number(e.target.value))}
-        />
-        <button type="submit">Delete Product</button>
+        <div className="mb-3 row justify-content-left">
+          <div className="col-md-5 col-lg-4">
+            <input
+              type="number"
+              placeholder="Product ID"
+              className="form-control"
+              value={productId || ''}
+              onChange={(e) => setProductId(Number(e.target.value))}
+            />
+            <div className="col-md-6 col-lg-4" >
+              <button type="submit" className="btn btn-primary w-100 mt-2">Delete Product</button>
+            </div>
+          </div>
+        </div>
       </form>
 
       {responseMessage && <p>{responseMessage}</p>}

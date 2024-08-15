@@ -15,6 +15,8 @@ import './Css/App.css';
 import useShoppingCart, { ShoppingCartProvider } from "./context/ShoppingCartContext";
 import { ProductProvider } from './context/ProductContext';
 import { UserProvider } from './context/UserContext';
+import PaymentConfirmation from './components/PaymentConfirmation';
+import ShoppingCartWrapper from './components/ShoppingCartWrapper';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,7 +54,6 @@ function App() {
       <ProductProvider>
         <ShoppingCartProvider>
           <Container className="mb-4">
-            <Router>
               <div>
                 {isLoggedIn && <p className='alert alert-success'>Welcome, {username || localStorage.getItem('username')}!</p>}
                 <Navbar isLoggedIn={isLoggedIn} username={username} handleLogout={handleLogout} />
@@ -65,9 +66,10 @@ function App() {
                   <Route path="/product/:productId" element={<ProductDetailsWrapper />} />
                   <Route path="/products" element={<ProductList />} />
                   <Route path="/admin" element={<AdminPanel />} />
+                  <Route path="/payment-confirmation" element={<PaymentConfirmation/>} />
+                  <Route path="/shopping-cart" element={<ShoppingCartWrapper isOpen={true} />} />
                 </Routes>
               </div>
-            </Router>
           </Container>
         </ShoppingCartProvider>
       </ProductProvider>
@@ -76,11 +78,11 @@ function App() {
   );
 }
 
-// Wrapper component to handle route params
 const ProductDetailsWrapper = () => {
   const { productId } = useParams<{ productId: string }>();
 
   return <ProductDetails productId={Number(productId)} />;
 };
+
 
 export default App;
