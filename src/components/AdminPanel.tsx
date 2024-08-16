@@ -5,11 +5,12 @@ interface Product {
   productName: string;
   price: string;
   stockQuantity: number;
+  category: string;
   image: File | null;
 }
 
 const AdminProductManager: React.FC = () => {
-  const [product, setProduct] = useState<Product>({ productName: '', price: '', stockQuantity: 0, image: null });
+  const [product, setProduct] = useState<Product>({ productName: '', price: '', stockQuantity: 0, category: '', image: null });
   const [productId, setProductId] = useState<number | null>(null);
   const [responseMessage, setResponseMessage] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +40,7 @@ const AdminProductManager: React.FC = () => {
       formData.append('productName', product.productName);
       formData.append('price', product.price);
       formData.append('stockQuantity', product.stockQuantity.toString());
+      formData.append('category', product.category);
       formData.append('image', product.image);
 
       const response = await axios.post(`${apiUrl}/createProduct`, formData, {
@@ -71,6 +73,7 @@ const AdminProductManager: React.FC = () => {
       if (product.productName) formData.append('productName', product.productName);
       if (product.price) formData.append('price', product.price);
       if (product.stockQuantity) formData.append('stockQuantity', product.stockQuantity.toString());
+      if (product.category) formData.append('category', product.category);
       if (product.image) formData.append('image', product.image);
       console.log(product.image);
 
@@ -147,6 +150,13 @@ const AdminProductManager: React.FC = () => {
               value={product.stockQuantity}
               onChange={(e) => setProduct({ ...product, stockQuantity: Number(e.target.value) })}
             />
+            <label htmlFor="Category">Category</label>
+            <input
+              type="text"
+              className="form-control"
+              value={product.category}
+              onChange={(e) => setProduct({ ...product, category: e.target.value })}
+            />
             <label>Product Image</label>
             <input type="file" className="form-control" onChange={handleFileChange} />
             <div className="col-md-6 col-lg-4" >
@@ -190,6 +200,13 @@ const AdminProductManager: React.FC = () => {
               className="form-control"
               value={product.stockQuantity}
               onChange={(e) => setProduct({ ...product, stockQuantity: Number(e.target.value) })}
+            />
+            <label htmlFor="Category">Category</label>
+            <input
+              type="text"
+              className="form-control"
+              value={product.category}
+              onChange={(e) => setProduct({ ...product, category: e.target.value })}
             />
             <label>Product Image</label>
             <input type="file" className="form-control" onChange={handleFileChange} />

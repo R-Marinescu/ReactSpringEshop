@@ -6,6 +6,7 @@ interface ProductDTO {
   productId: number;
   productName: string;
   price: number;
+  category: string;
   stockQuantity: number;
   image: string;
 }
@@ -58,6 +59,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId }) => {
               <li className="list-group-item"><strong>Product Name:</strong> {product.productName}</li>
               <li className="list-group-item"><strong>Product Price:</strong> ${product.price}</li>
               <li className="list-group-item"><strong>Stock Quantity:</strong> {product.stockQuantity}</li>
+              <li className="list-group-item"><strong>category:</strong> {product.category}</li>
             </ul>
           </div>
         </div>

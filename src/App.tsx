@@ -17,11 +17,13 @@ import { ProductProvider } from './context/ProductContext';
 import { UserProvider } from './context/UserContext';
 import PaymentConfirmation from './components/PaymentConfirmation';
 import ShoppingCartWrapper from './components/ShoppingCartWrapper';
+import ProductsCategory from './components/ProductsCategory';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const [token, setToken] = useState(localStorage.getItem('authToken'));
+  const [category, setCategory] = useState<string>('');
 
   useEffect(() => {
     if (token) {
@@ -58,7 +60,7 @@ function App() {
                 {isLoggedIn && <p className='alert alert-success'>Welcome, {username || localStorage.getItem('username')}!</p>}
                 <Navbar isLoggedIn={isLoggedIn} username={username} handleLogout={handleLogout} />
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<Home setCategory={setCategory}/>} />
                   <Route path="/About" element={<About />} />
                   <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} setToken={setToken} />} />
                   <Route path="/register" element={<RegisterForm />} />
@@ -68,6 +70,7 @@ function App() {
                   <Route path="/admin" element={<AdminPanel />} />
                   <Route path="/payment-confirmation" element={<PaymentConfirmation/>} />
                   <Route path="/shopping-cart" element={<ShoppingCartWrapper isOpen={true} />} />
+                  <Route path="products-category" element={<ProductsCategory category={category} setCategory={setCategory}/>}/>
                 </Routes>
               </div>
           </Container>
